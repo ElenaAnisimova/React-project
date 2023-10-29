@@ -33,7 +33,7 @@ export class SearchInput extends React.Component {
           className="search-input"
           // value={this.state.searchTerm}
           // onChange={this.handleChange}
-          placeholder="Enter search query"
+          placeholder="Enter Star Wars themed search query"
         />
         <button onClick={this.request} type="submit">
           Search

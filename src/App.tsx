@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 // import { SearchInput } from './components/UI/SearchInput';
 // import { SearchItem } from './components/UI/SearchItem';
+// TODO: ошибки через try catch
 
 type Props = {
   value: string;
@@ -30,20 +31,48 @@ export class App extends React.Component<Props, AppState> {
     this.request = this.request.bind(this);
   }
 
+  async componentDidMount(): Promise<void> {
+    if (!localStorage.getItem('searchQuery')) {
+      const request: Response = await fetch(`https://swapi.dev/api/people/`);
+      const requestJSON = await request.json();
+      const resultsJSON = requestJSON.results;
+      const results: SearchResult[] = resultsJSON.map((item: SearchResult) => ({
+        name: item.name,
+        height: item.height,
+        hair_color: item.hair_color,
+        eye_color: item.eye_color,
+        birth_year: item.birth_year,
+      }));
+      this.setState({ searchResults: results });
+
+      console.log(results);
+    } else {
+      const query = localStorage.getItem('searchQuery') as string;
+      this.setState({ query });
+      const request: Response = await fetch(`https://swapi.dev/api/people/`);
+      const requestJSON = await request.json();
+      const resultsJSON = requestJSON.results;
+      const results: SearchResult[] = resultsJSON.map((item: SearchResult) => ({
+        name: item.name,
+        height: item.height,
+        hair_color: item.hair_color,
+        eye_color: item.eye_color,
+        birth_year: item.birth_year,
+      }));
+      this.setState({ searchResults: results });
+    }
+  }
+
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     this.setState({ query });
-    console.log(this.state.query);
   };
-  // handleSearch = (value1: string) => {
-  //   this.setState({ value: value1 });
-  // };
 
   async request(e: { preventDefault: () => void }) {
     e.preventDefault();
     const { query } = this.state;
     const request: Response = await fetch(
-      `https://swapi.dev/api/people/?search=${query}`
+      `https://swapi.dev/api/people/?search=${query.trim()}`
     );
     const requestJSON = await request.json();
     const resultsJSON = requestJSON.results;
@@ -54,24 +83,17 @@ export class App extends React.Component<Props, AppState> {
       eye_color: item.eye_color,
       birth_year: item.birth_year,
     }));
+
     console.log(results);
     this.setState({ searchResults: results });
-    // return results;
+    localStorage.setItem('searchQuery', query.trim());
   }
 
   render() {
-    // const searchResults = this.request;
     const { searchResults, query } = this.state;
     return (
       <div>
-        {/* <button onClick={() => this.handleSearch(this.state.value)}>
-          Increment
-        </button> */}
-        {/* <p>You are {this.state.value}.</p> */}
         {/* <SearchInput></SearchInput> */}
-        {/* {results.map((name, info) => (
-        <SearchItem name={name} info={info} key={post.id} />
-      ))} */}
         {/* <SearchItem info={this.state.value} name="kkk"></SearchItem> */}
         <form>
           <input
@@ -79,7 +101,7 @@ export class App extends React.Component<Props, AppState> {
             className="search-input"
             value={query}
             onChange={this.handleInputChange}
-            placeholder="Enter search query"
+            placeholder="Enter Star Wars people themed search query"
           />
           <button onClick={this.request} type="submit">
             Search
