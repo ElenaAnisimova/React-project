@@ -30,12 +30,18 @@ export class App extends React.Component<Props, AppState> {
     this.request = this.request.bind(this);
   }
 
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    this.setState({ query });
+    console.log(this.state.query);
+  };
   // handleSearch = (value1: string) => {
   //   this.setState({ value: value1 });
   // };
 
-  async request(e: { preventDefault: () => void }, query) {
+  async request(e: { preventDefault: () => void }) {
     e.preventDefault();
+    const { query } = this.state;
     const request: Response = await fetch(
       `https://swapi.dev/api/people/?search=${query}`
     );
@@ -55,7 +61,7 @@ export class App extends React.Component<Props, AppState> {
 
   render() {
     // const searchResults = this.request;
-    const { searchResults } = this.state;
+    const { searchResults, query } = this.state;
     return (
       <div>
         {/* <button onClick={() => this.handleSearch(this.state.value)}>
@@ -71,8 +77,8 @@ export class App extends React.Component<Props, AppState> {
           <input
             type="text"
             className="search-input"
-            // value={this.state.searchTerm}
-            // onChange={this.handleChange}
+            value={query}
+            onChange={this.handleInputChange}
             placeholder="Enter search query"
           />
           <button onClick={this.request} type="submit">
