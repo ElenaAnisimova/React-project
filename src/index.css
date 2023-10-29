@@ -55,6 +55,21 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.search-item {
+  border: 1px solid black;
+  min-height: 15rem;
+  min-width: 10rem;
+  padding: 0.4rem;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
