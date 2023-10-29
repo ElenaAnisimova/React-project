@@ -2,9 +2,6 @@ import './App.css';
 import React from 'react';
 import { AppState, Props, SearchResult } from './types/types';
 import Loader from './components/Loader';
-// import { SearchInput } from './components/UI/SearchInput';
-// import { SearchItem } from './components/UI/SearchItem';
-// TODO: ошибки через try catch
 
 export class App extends React.Component<Props, AppState> {
   constructor(props: Props) {
@@ -51,7 +48,10 @@ export class App extends React.Component<Props, AppState> {
         birth_year: item.birth_year,
       }));
       this.setState({ searchResults: results, isSearchLoading: false });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      this.setState({ isSearchLoading: false });
+    }
   }
 
   async sendRequest(e: { preventDefault: () => void }) {
@@ -59,6 +59,10 @@ export class App extends React.Component<Props, AppState> {
     const { query } = this.state;
     this.setNewData();
     localStorage.setItem('searchQuery', query.trim());
+  }
+
+  makeError() {
+    throw new Error('New Error');
   }
 
   render() {
@@ -75,6 +79,10 @@ export class App extends React.Component<Props, AppState> {
           />
           <button onClick={this.sendRequest} type="submit">
             Search
+          </button>
+
+          <button onClick={this.makeError} type="button">
+            Try Error
           </button>
         </form>
         <div className="wrapper">
