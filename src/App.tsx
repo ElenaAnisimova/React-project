@@ -1,10 +1,19 @@
-// import { useState } from 'react'
 import './App.css';
+import { SearchInput } from './components/UI/SearchInput';
+import { SearchItem } from './components/UI/SearchItem';
 
 function App() {
   // const [count, setCount] = useState(0)
 
-  return <div></div>;
+  return (
+    <div>
+      <SearchInput></SearchInput>
+      {/* {results.map((name, info) => (
+        <SearchItem name={name} info={info} key={post.id} />
+      ))} */}
+      <SearchItem info="message" name="kkk"></SearchItem>
+    </div>
+  );
 }
 
 export default App;
