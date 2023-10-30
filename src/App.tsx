@@ -3,6 +3,9 @@ import React from 'react';
 import { AppState, Props, SearchResult } from './types/types';
 import Loader from './components/Loader';
 
+// при клике кнопка меняет состояние на hasError: true
+// в componentDidUpdate проверяете состояние hasError, если true, то выбрасываете ошибку наружу.
+
 export class App extends React.Component<Props, AppState> {
   constructor(props: Props) {
     super(props);
@@ -10,8 +13,10 @@ export class App extends React.Component<Props, AppState> {
       query: '',
       searchResults: [],
       isSearchLoading: false,
+      hasError: false,
     };
     this.sendRequest = this.sendRequest.bind(this);
+    this.makeError = this.makeError.bind(this);
   }
 
   async componentDidMount(): Promise<void> {
@@ -23,6 +28,12 @@ export class App extends React.Component<Props, AppState> {
       const query = localStorage.getItem('searchQuery') as string;
       this.setState({ query });
       this.setNewData();
+    }
+  }
+
+  componentDidUpdate(): void {
+    if (this.state.hasError) {
+      throw new Error('oh no! It is an Error!');
     }
   }
 
@@ -62,6 +73,7 @@ export class App extends React.Component<Props, AppState> {
   }
 
   makeError() {
+    this.setState({ hasError: true });
     throw new Error('New Error');
   }
 
