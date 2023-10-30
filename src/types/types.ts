@@ -17,6 +17,7 @@ export type AppState = {
   searchResults: SearchResult[];
   isSearchLoading: boolean;
   hasError: boolean;
+  example: string;
 };
 
 export type ErrorBoundaryProps = {

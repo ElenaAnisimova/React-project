@@ -3,9 +3,6 @@ import React from 'react';
 import { AppState, Props, SearchResult } from './types/types';
 import Loader from './components/Loader';
 
-// при клике кнопка меняет состояние на hasError: true
-// в componentDidUpdate проверяете состояние hasError, если true, то выбрасываете ошибку наружу.
-
 export class App extends React.Component<Props, AppState> {
   constructor(props: Props) {
     super(props);
@@ -14,21 +11,14 @@ export class App extends React.Component<Props, AppState> {
       searchResults: [],
       isSearchLoading: false,
       hasError: false,
+      example: 'try',
     };
     this.sendRequest = this.sendRequest.bind(this);
     this.makeError = this.makeError.bind(this);
   }
 
   async componentDidMount(): Promise<void> {
-    if (!localStorage.getItem('searchQuery')) {
-      const { query } = this.state;
-      this.setState({ query });
-      this.setNewData();
-    } else {
-      const query = localStorage.getItem('searchQuery') as string;
-      this.setState({ query });
-      this.setNewData();
-    }
+    this.setNewData(this.setQuery());
   }
 
   componentDidUpdate(): void {
@@ -42,12 +32,21 @@ export class App extends React.Component<Props, AppState> {
     this.setState({ query });
   };
 
-  async setNewData() {
-    const { query } = this.state;
+  setQuery(): string {
+    let query;
+    if (localStorage.getItem('searchQuery')) {
+      query = localStorage.getItem('searchQuery') as string;
+    } else {
+      query = this.state.query;
+    }
+    return query;
+  }
+
+  async setNewData(searchStr: string) {
     this.setState({ isSearchLoading: true });
     try {
       const request: Response = await fetch(
-        `https://swapi.dev/api/people/?search=${query.trim()}`
+        `https://swapi.dev/api/people/?search=${searchStr.trim()}`
       );
       const requestJSON = await request.json();
       const resultsJSON = requestJSON.results;
@@ -68,7 +67,7 @@ export class App extends React.Component<Props, AppState> {
   async sendRequest(e: { preventDefault: () => void }) {
     e.preventDefault();
     const { query } = this.state;
-    this.setNewData();
+    this.setNewData(query);
     localStorage.setItem('searchQuery', query.trim());
   }
 
