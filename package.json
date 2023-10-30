@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "husky install lint-staged",
+    "prepare": "husky install",
     "format:fix": "prettier . --write"
   },
   "dependencies": {
@@ -36,5 +36,10 @@
     "prettier": "^3.0.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
+  },
+  "lint-staged": {
+    "*.ts": "npx tsc --noEmit",
+    "*.{js,jsx,ts,tsx}": "npx eslint",
+    "*.{js,jsx,ts,tsx,html,css}": "npx prettier --write"
   }
 }

@@ -75,7 +75,7 @@ export class App extends React.Component<Props, AppState> {
     throw new Error('New Error');
   }
 
-  render()   {
+  render() {
     const { searchResults, query, isSearchLoading } = this.state;
     return (
       <div>
