@@ -11,7 +11,6 @@ export class App extends React.Component<Props, AppState> {
       searchResults: [],
       isSearchLoading: false,
       hasError: false,
-      example: 'try',
     };
     this.sendRequest = this.sendRequest.bind(this);
     this.makeError = this.makeError.bind(this);
@@ -76,7 +75,7 @@ export class App extends React.Component<Props, AppState> {
     throw new Error('New Error');
   }
 
-  render() {
+  render()   {
     const { searchResults, query, isSearchLoading } = this.state;
     return (
       <div>
