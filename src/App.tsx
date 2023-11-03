@@ -1,120 +1,104 @@
 import './App.css';
-import React from 'react';
-import { AppState, Props, SearchResult } from './types/types';
+import React, { useEffect, useState } from 'react';
+import { SearchResult } from './types/types';
 import Loader from './components/Loader';
+// import Button from './components/Button';
 
-export class App extends React.Component<Props, AppState> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      query: '',
-      searchResults: [],
-      isSearchLoading: false,
-      hasError: false,
-    };
-    this.sendRequest = this.sendRequest.bind(this);
-    this.makeError = this.makeError.bind(this);
-  }
+export function App() {
+  const [query, setQuery] = useState('');
+  const [searchResults, setsearchResults] = useState<SearchResult[]>([]);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  async componentDidMount(): Promise<void> {
-    this.setNewData(this.setQuery());
-  }
+  useEffect(() => {
+    const savedQuery = localStorage.getItem('searchQuery');
+    if (savedQuery) {
+      setNewData(savedQuery);
+    } else setNewData(query);
+  }, []);
 
-  componentDidUpdate(): void {
-    if (this.state.hasError) {
+  useEffect(() => {
+    if (hasError) {
       throw new Error('oh no! It is an Error!');
     }
+  }, [hasError]);
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(event.target.value);
   }
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value;
-    this.setState({ query });
-  };
+  async function setNewData(searchStr: string) {
+    console.log(query);
 
-  setQuery(): string {
-    let query;
-    if (localStorage.getItem('searchQuery')) {
-      query = localStorage.getItem('searchQuery') as string;
-    } else {
-      query = this.state.query;
-    }
-    return query;
-  }
-
-  async setNewData(searchStr: string) {
-    this.setState({ isSearchLoading: true });
+    setIsSearchLoading(true);
     try {
       const request: Response = await fetch(
         `https://swapi.dev/api/people/?search=${searchStr.trim()}`
       );
       const requestJSON = await request.json();
       const resultsJSON = requestJSON.results;
-      const results: SearchResult[] = resultsJSON.map((item: SearchResult) => ({
+      const results = resultsJSON.map((item: SearchResult) => ({
         name: item.name,
         height: item.height,
         hair_color: item.hair_color,
         eye_color: item.eye_color,
         birth_year: item.birth_year,
       }));
-      this.setState({ searchResults: results, isSearchLoading: false });
+      setsearchResults(results);
+      setIsSearchLoading(false);
     } catch (error) {
       console.log(error);
-      this.setState({ isSearchLoading: false });
+      setIsSearchLoading(false);
+      setHasError(true);
     }
   }
 
-  async sendRequest(e: { preventDefault: () => void }) {
-    e.preventDefault();
-    const { query } = this.state;
-    this.setNewData(query);
+  async function sendRequest() {
+    setNewData(query);
     localStorage.setItem('searchQuery', query.trim());
   }
 
-  makeError() {
-    this.setState({ hasError: true });
+  function makeError() {
+    setHasError(true);
     throw new Error('New Error');
   }
 
-  render() {
-    const { searchResults, query, isSearchLoading } = this.state;
-    return (
-      <div>
-        <form>
-          <input
-            type="text"
-            className="search-input"
-            value={query}
-            onChange={this.handleInputChange}
-            placeholder="Enter Star Wars people themed search query"
-          />
-          <button onClick={this.sendRequest} type="submit">
-            Search
-          </button>
-
-          <button onClick={this.makeError} type="button">
-            Try Error
-          </button>
-        </form>
-        <div className="wrapper">
-          {isSearchLoading ? (
-            <div className="loader-wrapper">
-              <Loader></Loader>
+  return (
+    <div>
+      <form>
+        <input
+          type="text"
+          className="search-input"
+          value={query}
+          onChange={handleInputChange}
+          placeholder="Enter Star Wars people themed search query"
+        />
+        <button onClick={sendRequest} type="button">
+          Search
+        </button>
+        <button onClick={makeError} type="button">
+          Try Error
+        </button>
+      </form>
+      <div className="wrapper">
+        {isSearchLoading ? (
+          <div className="loader-wrapper">
+            <Loader></Loader>
+          </div>
+        ) : (
+          searchResults.map((result, index: number) => (
+            <div className="search-item" key={index}>
+              <h4>{result.name}</h4>
+              <p>Birth year: {result.birth_year}</p>
+              <p>Height: {result.height}</p>
+              <p>Hair color: {result.hair_color}</p>
+              <p>Eye color: {result.eye_color}</p>
             </div>
-          ) : (
-            searchResults.map((result, index: number) => (
-              <div className="search-item" key={index}>
-                <h4>{result.name}</h4>
-                <p>Birth year: {result.birth_year}</p>
-                <p>Height: {result.height}</p>
-                <p>Hair color: {result.hair_color}</p>
-                <p>Eye color: {result.eye_color}</p>
-              </div>
-            ))
-          )}
-        </div>
+          ))
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default App;
