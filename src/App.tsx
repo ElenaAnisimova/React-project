@@ -4,24 +4,27 @@ import { SearchResult } from './types/types';
 import Loader from './components/Loader';
 import { APILord } from './ulits/api';
 // import Button from './components/Button';
-// import { getTotalCount } from './ulits/pages';
+import { getPagesNumbers } from './ulits/pages';
 
 export function App() {
   const [query, setQuery] = useState('');
   const [searchResults, setsearchResults] = useState<SearchResult[]>([]);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-
+  const [totalPages, setTotalPages] = useState(0);
   const [limit] = useState(10);
-
-  const [currentPage] = useState(1);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const pagesArr = getPagesNumbers(totalPages);
   // useEffect(() => {
   //   const savedQuery = localStorage.getItem('searchQuery');
   //   if (savedQuery) {
   //     setNewData(savedQuery);
   //   } else setNewData(query);
   // }, []);
+
+  useEffect(() => {
+    setNewData(query, limit, currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     if (hasError) {
@@ -33,6 +36,12 @@ export function App() {
     setQuery(event.target.value);
   }
 
+  function changePage(page: number) {
+    setCurrentPage(page);
+    console.log(currentPage);
+    // setNewData(query, limit, currentPage);
+  }
+
   async function setNewData(
     searchStr: string,
     limit: number,
@@ -42,9 +51,8 @@ export function App() {
     try {
       const responseJSON = await APILord(searchStr, limit, currentPage);
       const resultsJSON = responseJSON.docs;
-      const totalcountJSON = responseJSON.total;
-      console.log(resultsJSON);
-      console.log(totalcountJSON);
+      const totalPagesData = responseJSON.pages;
+      setTotalPages(totalPagesData);
 
       const results = resultsJSON.map((item: SearchResult) => ({
         name: item.name,
@@ -82,9 +90,6 @@ export function App() {
           onChange={handleInputChange}
           placeholder="Enter Star Wars people themed search query"
         />
-        {/* <button onClick={sendRequest} type="button">
-          Search
-        </button> */}
         <button onClick={sendRequest} type="button">
           Search
         </button>
@@ -109,7 +114,18 @@ export function App() {
           ))
         )}
       </div>
-      <div className="pagination__wrapper"></div>
+      <div className="pagination__wrapper">
+        {pagesArr.map((page) => (
+          <button
+            className={page === currentPage ? 'page page__current' : 'page'}
+            key={page}
+            type="button"
+            onClick={() => changePage(page)}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
