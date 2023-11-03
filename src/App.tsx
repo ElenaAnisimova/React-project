@@ -2,7 +2,9 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { SearchResult } from './types/types';
 import Loader from './components/Loader';
+import { APILord } from './ulits/api';
 // import Button from './components/Button';
+// import { getTotalCount } from './ulits/pages';
 
 export function App() {
   const [query, setQuery] = useState('');
@@ -10,12 +12,16 @@ export function App() {
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    const savedQuery = localStorage.getItem('searchQuery');
-    if (savedQuery) {
-      setNewData(savedQuery);
-    } else setNewData(query);
-  }, []);
+  const [limit] = useState(10);
+
+  const [currentPage] = useState(1);
+
+  // useEffect(() => {
+  //   const savedQuery = localStorage.getItem('searchQuery');
+  //   if (savedQuery) {
+  //     setNewData(savedQuery);
+  //   } else setNewData(query);
+  // }, []);
 
   useEffect(() => {
     if (hasError) {
@@ -27,22 +33,25 @@ export function App() {
     setQuery(event.target.value);
   }
 
-  async function setNewData(searchStr: string) {
-    console.log(query);
-
+  async function setNewData(
+    searchStr: string,
+    limit: number,
+    currentPage: number
+  ) {
     setIsSearchLoading(true);
     try {
-      const request: Response = await fetch(
-        `https://swapi.dev/api/people/?search=${searchStr.trim()}`
-      );
-      const requestJSON = await request.json();
-      const resultsJSON = requestJSON.results;
+      const responseJSON = await APILord(searchStr, limit, currentPage);
+      const resultsJSON = responseJSON.docs;
+      const totalcountJSON = responseJSON.total;
+      console.log(resultsJSON);
+      console.log(totalcountJSON);
+
       const results = resultsJSON.map((item: SearchResult) => ({
         name: item.name,
         height: item.height,
-        hair_color: item.hair_color,
-        eye_color: item.eye_color,
-        birth_year: item.birth_year,
+        race: item.race,
+        birth: item.birth,
+        spouse: item.spouse,
       }));
       setsearchResults(results);
       setIsSearchLoading(false);
@@ -54,7 +63,7 @@ export function App() {
   }
 
   async function sendRequest() {
-    setNewData(query);
+    setNewData(query, limit, currentPage);
     localStorage.setItem('searchQuery', query.trim());
   }
 
@@ -73,6 +82,9 @@ export function App() {
           onChange={handleInputChange}
           placeholder="Enter Star Wars people themed search query"
         />
+        {/* <button onClick={sendRequest} type="button">
+          Search
+        </button> */}
         <button onClick={sendRequest} type="button">
           Search
         </button>
@@ -89,14 +101,15 @@ export function App() {
           searchResults.map((result, index: number) => (
             <div className="search-item" key={index}>
               <h4>{result.name}</h4>
-              <p>Birth year: {result.birth_year}</p>
+              <p>Race: {result.race}</p>
+              <p>Birth year: {result.birth}</p>
               <p>Height: {result.height}</p>
-              <p>Hair color: {result.hair_color}</p>
-              <p>Eye color: {result.eye_color}</p>
+              <p>Spouse: {result.spouse}</p>
             </div>
           ))
         )}
       </div>
+      <div className="pagination__wrapper"></div>
     </div>
   );
 }

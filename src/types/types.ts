@@ -7,9 +7,9 @@ export type Props = {
 export type SearchResult = {
   name: string;
   height: string;
-  hair_color: string;
-  eye_color: string;
-  birth_year: string;
+  birth: string;
+  race: string;
+  spouse: string;
 };
 
 export type AppState = {

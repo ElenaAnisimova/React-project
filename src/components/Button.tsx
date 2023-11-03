@@ -1,16 +1,5 @@
-import { Component } from 'react';
+// import React from 'react';
 
-interface ButtonProps {
-  handleClick: () => Promise<void>;
-  type: 'button';
-}
-export default class Button extends Component<ButtonProps> {
-  render() {
-    const { type } = this.props;
-    return (
-      <button onClick={this.props.handleClick} type={type}>
-        Search
-      </button>
-    );
-  }
-}
+// export const Button = (props) => {
+//   return <button className="page-btn">{props.number}</button>;
+// };
