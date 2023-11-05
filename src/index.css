@@ -115,6 +115,18 @@ input {
   right: 0;
   border: 3px solid black;
   background-color: #d8d8d8;
+  padding-top: 0.5rem;
+}
+
+.background {
+  width: 100vw;
+  min-height: 100vh;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: 0.3s all linear;
+  overflow-y: hidden;
 }
 
 @keyframes loading {

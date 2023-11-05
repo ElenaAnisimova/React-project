@@ -13,7 +13,6 @@ import DetailsSection from '../components/DetailsSection/DetailsSection';
 
 // TODO: MAKE ALERT ABOUT 429
 // SAVE CURRENT PAGE TO ls
-// PATH WITH PAGE SIZE
 
 export function SearchPage() {
   const [query, setQuery] = useState('');
@@ -23,7 +22,6 @@ export function SearchPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [openDetails, setOpenDetails] = useState(false);
   const [currentItemID, setCurrentItemID] = useState('');
   const [currentItem, setCurrentItem] =
@@ -62,16 +60,21 @@ export function SearchPage() {
   function changePage(page: number) {
     setCurrentPage(page);
     navigate(`/results/${page}`);
-    console.log(currentPage);
     // setNewData(query, limit, currentPage);
   }
 
   function changeItemsLimit(event: React.ChangeEvent<HTMLSelectElement>) {
     setLimit(Number(event.target.value));
     // setNewData(query, limit, currentPage);
-    console.log(limit);
   }
-
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    if (openDetails) {
+      const className = (e.target as Element).className;
+      if (className === 'background') {
+        setOpenDetails(false);
+      }
+    }
+  }
   async function setSearchResults(
     searchStr: string,
     limit: number,
@@ -106,13 +109,6 @@ export function SearchPage() {
     try {
       const responseJSON = await APICharacterID(currentItemID);
       const resultsJSON = responseJSON.docs;
-      // const results = resultsJSON.map((item: SearchResultType) => ({
-      //   name: item.name,
-      //   height: item.height,
-      //   race: item.race,
-      //   birth: item.birth,
-      //   spouse: item.spouse,
-      // }));
       const result = currentItemIDInitial;
       Object.assign(result, resultsJSON[0]);
       setCurrentItem(result);
@@ -133,10 +129,10 @@ export function SearchPage() {
 
   function showDetails(id: string) {
     setCurrentItemID(id);
-    console.log(currentItemID);
-
     setOpenDetails(true);
-    // setCharacterDetails();
+  }
+  function closeDetails() {
+    setOpenDetails(false);
   }
 
   function makeError() {
@@ -145,7 +141,7 @@ export function SearchPage() {
   }
 
   return (
-    <div>
+    <div onClick={handleClick}>
       <SearchBar
         className="search-input"
         type="text"
@@ -168,7 +164,12 @@ export function SearchPage() {
           totalPages={totalPages}
         />
       )}
-      {openDetails ? <DetailsSection searchResult={currentItem} /> : null}
+      {openDetails && !isSearchLoading ? (
+        <DetailsSection
+          searchResult={currentItem}
+          closeDetails={closeDetails}
+        />
+      ) : null}
     </div>
   );
 }

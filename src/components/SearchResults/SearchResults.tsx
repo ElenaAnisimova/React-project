@@ -16,7 +16,6 @@ export default function SearchResults({
         searchResults.map((result, index: number) => (
           <div
             className="search-item"
-            // id={result._id}
             key={index}
             onClick={() => showDetails(result._id)}
           >

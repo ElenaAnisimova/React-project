@@ -11,5 +11,4 @@ export type SearchResultProps = {
   searchResults: SearchResultType[];
   isSearchLoading: boolean;
   showDetails: (id: string) => void;
-  // id: string;
 };
