@@ -1,18 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { SearchResultType } from '../components/SearchResults/SearchResultsTypes';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { APISearch, APICharacterID } from '../ulits/api';
 import SearchBar from '../components/SearchBar/SearchBar';
 import SearchResults from '../components/SearchResults/SearchResults';
 import { placeholderText, currentItemIDInitial } from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
-import ItemsSelect from '../components/ItemsPerPage//ItemsSelect';
+import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
 import DetailsSection from '../components/DetailsSection/DetailsSection';
-
-// TODO: MAKE ALERT ABOUT 429
-// SAVE CURRENT PAGE TO ls
 
 export function SearchPage() {
   const [query, setQuery] = useState('');
@@ -28,20 +24,18 @@ export function SearchPage() {
     useState<SearchResultType>(currentItemIDInitial);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const savedQuery = localStorage.getItem('searchQuery');
-  //   if (savedQuery) {
-  //     setNewData(savedQuery);
-  //   } else setNewData(query);
-  // }, []);
+  useEffect(() => {
+    const savedQuery = localStorage.getItem('searchQuery');
+    if (savedQuery) {
+      getSearchResults(savedQuery, limit, currentPage);
+    } else getSearchResults(query, limit, currentPage);
+  }, []);
 
   useEffect(() => {
-    // navigate(`/results/${currentPage}`);
-    setSearchResults(query, limit, currentPage);
+    getSearchResults(query, limit, currentPage);
   }, [currentPage, limit]);
 
   useEffect(() => {
-    // navigate(`/results/${currentPage}`);
     setCharacterDetails();
   }, [currentItemID]);
 
@@ -60,12 +54,10 @@ export function SearchPage() {
   function changePage(page: number) {
     setCurrentPage(page);
     navigate(`/results/${page}`);
-    // setNewData(query, limit, currentPage);
   }
 
   function changeItemsLimit(event: React.ChangeEvent<HTMLSelectElement>) {
     setLimit(Number(event.target.value));
-    // setNewData(query, limit, currentPage);
   }
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     if (openDetails) {
@@ -75,7 +67,7 @@ export function SearchPage() {
       }
     }
   }
-  async function setSearchResults(
+  async function getSearchResults(
     searchStr: string,
     limit: number,
     currentPage: number
@@ -122,7 +114,7 @@ export function SearchPage() {
 
   async function sendRequest() {
     setCurrentPage(1);
-    setSearchResults(query, limit, currentPage);
+    getSearchResults(query, limit, currentPage);
     navigate('/results/1');
     localStorage.setItem('searchQuery', query.trim());
   }
@@ -131,6 +123,7 @@ export function SearchPage() {
     setCurrentItemID(id);
     setOpenDetails(true);
   }
+
   function closeDetails() {
     setOpenDetails(false);
   }
