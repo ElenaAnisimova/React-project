@@ -7,6 +7,7 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import SearchResults from '../components/SearchResults/SearchResults';
 import { placeholderText } from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
+import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
 
 export function SearchPage() {
   const [query, setQuery] = useState('');
@@ -14,7 +15,7 @@ export function SearchPage() {
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
-  const [limit] = useState(10);
+  const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
@@ -28,7 +29,7 @@ export function SearchPage() {
   useEffect(() => {
     // navigate(`/results/${currentPage}`);
     setNewData(query, limit, currentPage);
-  }, [currentPage]);
+  }, [currentPage, limit]);
 
   useEffect(() => {
     if (hasError) {
@@ -45,6 +46,12 @@ export function SearchPage() {
     navigate(`/results/${page}`);
     console.log(currentPage);
     // setNewData(query, limit, currentPage);
+  }
+
+  function changeItemsLimit(event: React.ChangeEvent<HTMLSelectElement>) {
+    setLimit(Number(event.target.value));
+    // setNewData(query, limit, currentPage);
+    console.log(limit);
   }
 
   async function setNewData(
@@ -98,6 +105,7 @@ export function SearchPage() {
         makeError={makeError}
         handleInput={handleInputChange}
       ></SearchBar>
+      <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
       <SearchResults
         isSearchLoading={isSearchLoading}
         searchResults={searchResults}
