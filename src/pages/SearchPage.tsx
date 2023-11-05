@@ -1,13 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { SearchResultType } from '../components/SearchResults/SearchResultsTypes';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { APILord } from '../ulits/api';
+import { APISearch, APICharacterID } from '../ulits/api';
 import SearchBar from '../components/SearchBar/SearchBar';
 import SearchResults from '../components/SearchResults/SearchResults';
-import { placeholderText } from './SearchPageVariables';
+import { placeholderText, currentItemIDInitial } from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
-import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
+import ItemsSelect from '../components/ItemsPerPage//ItemsSelect';
+import DetailsSection from '../components/DetailsSection/DetailsSection';
+
+// TODO: MAKE ALERT ABOUT 429
+// SAVE CURRENT PAGE TO ls
+// PATH WITH PAGE SIZE
 
 export function SearchPage() {
   const [query, setQuery] = useState('');
@@ -17,6 +23,11 @@ export function SearchPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [openDetails, setOpenDetails] = useState(false);
+  const [currentItemID, setCurrentItemID] = useState('');
+  const [currentItem, setCurrentItem] =
+    useState<SearchResultType>(currentItemIDInitial);
   const navigate = useNavigate();
 
   // useEffect(() => {
@@ -28,8 +39,15 @@ export function SearchPage() {
 
   useEffect(() => {
     // navigate(`/results/${currentPage}`);
-    setNewData(query, limit, currentPage);
+    setSearchResults(query, limit, currentPage);
   }, [currentPage, limit]);
+
+  useEffect(() => {
+    // navigate(`/results/${currentPage}`);
+    setCharacterDetails();
+  }, [currentItemID]);
+
+  useEffect(() => {}, [currentItem]);
 
   useEffect(() => {
     if (hasError) {
@@ -54,14 +72,14 @@ export function SearchPage() {
     console.log(limit);
   }
 
-  async function setNewData(
+  async function setSearchResults(
     searchStr: string,
     limit: number,
     currentPage: number
   ) {
     setIsSearchLoading(true);
     try {
-      const responseJSON = await APILord(searchStr, limit, currentPage);
+      const responseJSON = await APISearch(searchStr, limit, currentPage);
       const resultsJSON = responseJSON.docs;
       const totalPagesData = responseJSON.pages;
       setTotalPages(totalPagesData);
@@ -72,6 +90,7 @@ export function SearchPage() {
         race: item.race,
         birth: item.birth,
         spouse: item.spouse,
+        _id: item._id,
       }));
       setsearchResults(results);
       setIsSearchLoading(false);
@@ -82,11 +101,42 @@ export function SearchPage() {
     }
   }
 
+  async function setCharacterDetails() {
+    setIsSearchLoading(true);
+    try {
+      const responseJSON = await APICharacterID(currentItemID);
+      const resultsJSON = responseJSON.docs;
+      // const results = resultsJSON.map((item: SearchResultType) => ({
+      //   name: item.name,
+      //   height: item.height,
+      //   race: item.race,
+      //   birth: item.birth,
+      //   spouse: item.spouse,
+      // }));
+      const result = currentItemIDInitial;
+      Object.assign(result, resultsJSON[0]);
+      setCurrentItem(result);
+      setIsSearchLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsSearchLoading(false);
+      setHasError(true);
+    }
+  }
+
   async function sendRequest() {
     setCurrentPage(1);
-    setNewData(query, limit, currentPage);
+    setSearchResults(query, limit, currentPage);
     navigate('/results/1');
     localStorage.setItem('searchQuery', query.trim());
+  }
+
+  function showDetails(id: string) {
+    setCurrentItemID(id);
+    console.log(currentItemID);
+
+    setOpenDetails(true);
+    // setCharacterDetails();
   }
 
   function makeError() {
@@ -109,6 +159,7 @@ export function SearchPage() {
       <SearchResults
         isSearchLoading={isSearchLoading}
         searchResults={searchResults}
+        showDetails={showDetails}
       />
       {isSearchLoading ? null : (
         <Pagination
@@ -117,6 +168,7 @@ export function SearchPage() {
           totalPages={totalPages}
         />
       )}
+      {openDetails ? <DetailsSection searchResult={currentItem} /> : null}
     </div>
   );
 }
