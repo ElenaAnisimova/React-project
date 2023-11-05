@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { SearchResultType } from '../components/SearchResults/SearchResultsTypes';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { APILord } from '../ulits/api';
 import SearchBar from '../components/SearchBar/SearchBar';
 import SearchResults from '../components/SearchResults/SearchResults';
-
+import { placeholderText } from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
 
-export function Search() {
+export function SearchPage() {
   const [query, setQuery] = useState('');
   const [searchResults, setsearchResults] = useState<SearchResultType[]>([]);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
@@ -15,6 +16,7 @@ export function Search() {
   const [totalPages, setTotalPages] = useState(0);
   const [limit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   const savedQuery = localStorage.getItem('searchQuery');
@@ -24,6 +26,7 @@ export function Search() {
   // }, []);
 
   useEffect(() => {
+    // navigate(`/results/${currentPage}`);
     setNewData(query, limit, currentPage);
   }, [currentPage]);
 
@@ -39,6 +42,7 @@ export function Search() {
 
   function changePage(page: number) {
     setCurrentPage(page);
+    navigate(`/results/${page}`);
     console.log(currentPage);
     // setNewData(query, limit, currentPage);
   }
@@ -72,7 +76,9 @@ export function Search() {
   }
 
   async function sendRequest() {
+    setCurrentPage(1);
     setNewData(query, limit, currentPage);
+    navigate('/results/1');
     localStorage.setItem('searchQuery', query.trim());
   }
 
@@ -87,7 +93,7 @@ export function Search() {
         className="search-input"
         type="text"
         query={query}
-        placeholder="Enter Lord of the Rings characters themed search query"
+        placeholder={placeholderText}
         sendRequest={sendRequest}
         makeError={makeError}
         handleInput={handleInputChange}
@@ -96,13 +102,15 @@ export function Search() {
         isSearchLoading={isSearchLoading}
         searchResults={searchResults}
       />
-      <Pagination
-        currentPage={currentPage}
-        changePage={changePage}
-        totalPages={totalPages}
-      />
+      {isSearchLoading ? null : (
+        <Pagination
+          currentPage={currentPage}
+          changePage={changePage}
+          totalPages={totalPages}
+        />
+      )}
     </div>
   );
 }
 
-export default Search;
+export default SearchPage;
