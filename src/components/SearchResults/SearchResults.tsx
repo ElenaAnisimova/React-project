@@ -1,4 +1,4 @@
-import Loader from '../Loader';
+import Loader from '../Loaders/Loader';
 import { SearchResultProps } from './SearchResultsTypes';
 
 export default function SearchResults({

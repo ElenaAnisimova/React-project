@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { SearchResultType } from '../components/SearchResults/SearchResultsTypes';
 import { useNavigate } from 'react-router-dom';
 import { APISearch, APICharacterID } from '../ulits/api';
@@ -9,13 +9,18 @@ import { placeholderText, currentItemIDInitial } from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
 import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
 import DetailsSection from '../components/DetailsSection/DetailsSection';
+import { SearchContext } from '../ulits/contexts/SearchContext';
+import { LoadingContext } from '../ulits/contexts/LoadingContext';
 
 export function SearchPage() {
-  const [query, setQuery] = useState('');
-  const [searchResults, setsearchResults] = useState<SearchResultType[]>([]);
+  // const [query, setQuery] = useState('');
+  const { query } = useContext(SearchContext);
+  const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [areDetailsLoading, setAreDetailsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
+
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [openDetails, setOpenDetails] = useState(false);
@@ -48,7 +53,9 @@ export function SearchPage() {
   }, [hasError]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setQuery(event.target.value);
+    // setQuery(event.target.value);
+    event.preventDefault();
+    console.log(123);
   }
 
   function changePage(page: number) {
@@ -87,7 +94,7 @@ export function SearchPage() {
         spouse: item.spouse,
         _id: item._id,
       }));
-      setsearchResults(results);
+      setSearchResults(results);
       setIsSearchLoading(false);
     } catch (error) {
       console.log(error);
@@ -97,17 +104,19 @@ export function SearchPage() {
   }
 
   async function setCharacterDetails() {
-    setIsSearchLoading(true);
+    setAreDetailsLoading(true);
+    console.log(areDetailsLoading);
+
     try {
       const responseJSON = await APICharacterID(currentItemID);
       const resultsJSON = responseJSON.docs;
       const result = currentItemIDInitial;
       Object.assign(result, resultsJSON[0]);
       setCurrentItem(result);
-      setIsSearchLoading(false);
+      setAreDetailsLoading(false);
     } catch (error) {
       console.log(error);
-      setIsSearchLoading(false);
+      setAreDetailsLoading(false);
       setHasError(true);
     }
   }
@@ -121,6 +130,7 @@ export function SearchPage() {
 
   function showDetails(id: string) {
     setCurrentItemID(id);
+    // setCharacterDetails();
     setOpenDetails(true);
   }
 
@@ -134,36 +144,42 @@ export function SearchPage() {
   }
 
   return (
-    <div onClick={handleClick}>
-      <SearchBar
-        className="search-input"
-        type="text"
-        query={query}
-        placeholder={placeholderText}
-        sendRequest={sendRequest}
-        makeError={makeError}
-        handleInput={handleInputChange}
-      ></SearchBar>
-      <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
-      <SearchResults
-        isSearchLoading={isSearchLoading}
-        searchResults={searchResults}
-        showDetails={showDetails}
-      />
-      {isSearchLoading ? null : (
-        <Pagination
-          currentPage={currentPage}
-          changePage={changePage}
-          totalPages={totalPages}
-        />
-      )}
-      {openDetails && !isSearchLoading ? (
-        <DetailsSection
-          searchResult={currentItem}
-          closeDetails={closeDetails}
-        />
-      ) : null}
-    </div>
+    <LoadingContext.Provider
+      value={{ areDetailsLoading, setAreDetailsLoading }}
+    >
+      <SearchContext.Provider value={{ query }}>
+        <div onClick={handleClick}>
+          <SearchBar
+            className="search-input"
+            type="text"
+            query={query}
+            placeholder={placeholderText}
+            sendRequest={sendRequest}
+            makeError={makeError}
+            handleInput={handleInputChange}
+          ></SearchBar>
+          <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
+          <SearchResults
+            isSearchLoading={isSearchLoading}
+            searchResults={searchResults}
+            showDetails={showDetails}
+          />
+          {isSearchLoading ? null : (
+            <Pagination
+              currentPage={currentPage}
+              changePage={changePage}
+              totalPages={totalPages}
+            />
+          )}
+          {openDetails ? (
+            <DetailsSection
+              searchResult={currentItem}
+              closeDetails={closeDetails}
+            />
+          ) : null}
+        </div>
+      </SearchContext.Provider>
+    </LoadingContext.Provider>
   );
 }
 
