@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SearchResultType } from '../components/SearchResults/SearchResultsTypes';
 import { useNavigate } from 'react-router-dom';
 import { APISearch, APICharacterID } from '../ulits/api';
@@ -13,8 +13,7 @@ import { SearchContext } from '../ulits/contexts/SearchContext';
 import { LoadingContext } from '../ulits/contexts/LoadingContext';
 
 export function SearchPage() {
-  // const [query, setQuery] = useState('');
-  const { query } = useContext(SearchContext);
+  const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [areDetailsLoading, setAreDetailsLoading] = useState(false);
@@ -45,18 +44,11 @@ export function SearchPage() {
   }, [currentItemID]);
 
   useEffect(() => {}, [currentItem]);
-
   useEffect(() => {
     if (hasError) {
       throw new Error('oh no! It is an Error!');
     }
   }, [hasError]);
-
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // setQuery(event.target.value);
-    event.preventDefault();
-    console.log(123);
-  }
 
   function changePage(page: number) {
     setCurrentPage(page);
@@ -105,8 +97,6 @@ export function SearchPage() {
 
   async function setCharacterDetails() {
     setAreDetailsLoading(true);
-    console.log(areDetailsLoading);
-
     try {
       const responseJSON = await APICharacterID(currentItemID);
       const resultsJSON = responseJSON.docs;
@@ -147,7 +137,7 @@ export function SearchPage() {
     <LoadingContext.Provider
       value={{ areDetailsLoading, setAreDetailsLoading }}
     >
-      <SearchContext.Provider value={{ query }}>
+      <SearchContext.Provider value={{ query, setQuery }}>
         <div onClick={handleClick}>
           <SearchBar
             className="search-input"
@@ -156,7 +146,7 @@ export function SearchPage() {
             placeholder={placeholderText}
             sendRequest={sendRequest}
             makeError={makeError}
-            handleInput={handleInputChange}
+            // handleInput={handleInputChange}
           ></SearchBar>
           <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
           <SearchResults

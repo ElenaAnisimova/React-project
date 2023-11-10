@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { DetailedSectionProps } from './DetailsSectionTypes';
 import { CloseButton } from '../Buttons/CloseButton';
-// import { LoadingContext } from '../../ulits/contexts/LoadingContext';
 import DetailsLoader from '../Loaders/DetailsLoader';
 import { LoadingContext } from '../../ulits/contexts/LoadingContext';
 
