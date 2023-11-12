@@ -1,9 +1,9 @@
 import { ButtonProps } from './ButtonTypes';
 
-export const SearchButton = ({ text, sendRequest }: ButtonProps) => {
+export const SearchButton = ({ sendRequest, children }: ButtonProps) => {
   return (
     <button onClick={sendRequest} className="page-btn" type="button">
-      {text}
+      {children}
     </button>
   );
 };

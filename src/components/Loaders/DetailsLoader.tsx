@@ -1,4 +1,8 @@
 function DetailsLoader() {
-  return <div className="loader-details">Loading details...</div>;
+  return (
+    <div data-testid="details-loader" className="loader-details">
+      Loading details...
+    </div>
+  );
 }
 export default DetailsLoader;

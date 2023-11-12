@@ -1,11 +1,13 @@
 import Loader from '../Loaders/Loader';
+import { useContext } from 'react';
 import { SearchResultProps } from './SearchResultsTypes';
+import { SearchResultsContext } from '../../ulits/contexts/SearchContext';
 
 export default function SearchResults({
   isSearchLoading,
-  searchResults,
   showDetails,
 }: SearchResultProps) {
+  const { searchResults } = useContext(SearchResultsContext);
   return (
     <div className="wrapper">
       {isSearchLoading ? (

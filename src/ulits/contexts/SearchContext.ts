@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-// import { SearchResultType } from '../../components/SearchResults/SearchResultsTypes';
-type SearchContextType = {
+import { SearchResultType } from '../../components/SearchResults/SearchResultsTypes';
+type SearchQueryContextType = {
   query: string;
   setQuery: (str: string) => void;
 };
@@ -11,18 +11,24 @@ const defaultState = {
     console.log(str);
   },
 };
-export const SearchContext = createContext<SearchContextType>(defaultState);
+export const SearchContext =
+  createContext<SearchQueryContextType>(defaultState);
 
-// export const SearchResultsContext =
-//   createContext<InitialSearchResultsContextType>({
-//     searchResult: [],
-//     // setQuery: () => {},v
-//   });
+export type SearchContextType = {
+  searchResults: SearchResultType[];
+  currentItem: SearchResultType;
+};
 
-// export type InitialSearchResultsContextType = {
-//   searchResult: SearchResultType[];
-// };
-// export const SearchContext = createContext<InitialSearchContextType>({
-//   queryContext: '',
-//   // setQuery: () => {},
-// });
+const defaultStateCharacter = <SearchContextType>{
+  searchResults: [],
+  currentItem: {
+    name: '',
+    height: '',
+    birth: '',
+    race: '',
+    spouse: '',
+    _id: '',
+  },
+};
+
+export const SearchResultsContext = createContext(defaultStateCharacter);

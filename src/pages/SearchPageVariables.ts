@@ -9,3 +9,7 @@ export const currentItemIDInitial = {
   spouse: '',
   _id: '',
 };
+
+export const DEFAULT_TOTAL_PAGES = 0;
+export const DEFAULT_LIMIT = 10;
+export const DEFAULT_CURRENT_PAGE = 1;

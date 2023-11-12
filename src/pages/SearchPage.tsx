@@ -5,11 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import { APISearch, APICharacterID } from '../ulits/api';
 import SearchBar from '../components/SearchBar/SearchBar';
 import SearchResults from '../components/SearchResults/SearchResults';
-import { placeholderText, currentItemIDInitial } from './SearchPageVariables';
+import {
+  placeholderText,
+  currentItemIDInitial,
+  DEFAULT_TOTAL_PAGES,
+  DEFAULT_LIMIT,
+  DEFAULT_CURRENT_PAGE,
+} from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
 import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
 import DetailsSection from '../components/DetailsSection/DetailsSection';
-import { SearchContext } from '../ulits/contexts/SearchContext';
+import {
+  SearchContext,
+  SearchResultsContext,
+} from '../ulits/contexts/SearchContext';
 import { LoadingContext } from '../ulits/contexts/LoadingContext';
 
 export function SearchPage() {
@@ -18,10 +27,9 @@ export function SearchPage() {
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [areDetailsLoading, setAreDetailsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-
-  const [limit, setLimit] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(DEFAULT_TOTAL_PAGES);
+  const [limit, setLimit] = useState(DEFAULT_LIMIT);
+  const [currentPage, setCurrentPage] = useState(DEFAULT_CURRENT_PAGE);
   const [openDetails, setOpenDetails] = useState(false);
   const [currentItemID, setCurrentItemID] = useState('');
   const [currentItem, setCurrentItem] =
@@ -30,9 +38,8 @@ export function SearchPage() {
 
   useEffect(() => {
     const savedQuery = localStorage.getItem('searchQuery');
-    if (savedQuery) {
-      getSearchResults(savedQuery, limit, currentPage);
-    } else getSearchResults(query, limit, currentPage);
+    const queryString = savedQuery ? savedQuery : query;
+    getSearchResults(queryString, limit, currentPage);
   }, []);
 
   useEffect(() => {
@@ -57,12 +64,16 @@ export function SearchPage() {
 
   function changeItemsLimit(event: React.ChangeEvent<HTMLSelectElement>) {
     setLimit(Number(event.target.value));
+    setCurrentPage(1);
+    navigate(`/results/${1}`);
   }
+
   function handleClick(e: React.MouseEvent<HTMLDivElement>) {
     if (openDetails) {
       const className = (e.target as Element).className;
       if (className === 'background') {
         setOpenDetails(false);
+        console.log(openDetails);
       }
     }
   }
@@ -87,11 +98,11 @@ export function SearchPage() {
         _id: item._id,
       }));
       setSearchResults(results);
-      setIsSearchLoading(false);
     } catch (error) {
       console.log(error);
-      setIsSearchLoading(false);
       setHasError(true);
+    } finally {
+      setIsSearchLoading(false);
     }
   }
 
@@ -103,11 +114,11 @@ export function SearchPage() {
       const result = currentItemIDInitial;
       Object.assign(result, resultsJSON[0]);
       setCurrentItem(result);
-      setAreDetailsLoading(false);
     } catch (error) {
       console.log(error);
-      setAreDetailsLoading(false);
       setHasError(true);
+    } finally {
+      setAreDetailsLoading(false);
     }
   }
 
@@ -120,12 +131,7 @@ export function SearchPage() {
 
   function showDetails(id: string) {
     setCurrentItemID(id);
-    // setCharacterDetails();
     setOpenDetails(true);
-  }
-
-  function closeDetails() {
-    setOpenDetails(false);
   }
 
   function makeError() {
@@ -134,42 +140,39 @@ export function SearchPage() {
   }
 
   return (
-    <LoadingContext.Provider
-      value={{ areDetailsLoading, setAreDetailsLoading }}
-    >
-      <SearchContext.Provider value={{ query, setQuery }}>
-        <div onClick={handleClick}>
-          <SearchBar
-            className="search-input"
-            type="text"
-            query={query}
-            placeholder={placeholderText}
-            sendRequest={sendRequest}
-            makeError={makeError}
-            // handleInput={handleInputChange}
-          ></SearchBar>
-          <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
-          <SearchResults
-            isSearchLoading={isSearchLoading}
-            searchResults={searchResults}
-            showDetails={showDetails}
-          />
-          {isSearchLoading ? null : (
-            <Pagination
-              currentPage={currentPage}
-              changePage={changePage}
-              totalPages={totalPages}
+    <SearchResultsContext.Provider value={{ searchResults, currentItem }}>
+      <LoadingContext.Provider
+        value={{ areDetailsLoading, setAreDetailsLoading }}
+      >
+        <SearchContext.Provider value={{ query, setQuery }}>
+          <div onClick={handleClick}>
+            <SearchBar
+              className="search-input"
+              type="text"
+              query={query}
+              placeholder={placeholderText}
+              sendRequest={sendRequest}
+              makeError={makeError}
+            ></SearchBar>
+            <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
+            <SearchResults
+              isSearchLoading={isSearchLoading}
+              showDetails={showDetails}
             />
-          )}
-          {openDetails ? (
-            <DetailsSection
-              searchResult={currentItem}
-              closeDetails={closeDetails}
-            />
-          ) : null}
-        </div>
-      </SearchContext.Provider>
-    </LoadingContext.Provider>
+            {isSearchLoading ? null : (
+              <Pagination
+                currentPage={currentPage}
+                changePage={changePage}
+                totalPages={totalPages}
+              />
+            )}
+            {openDetails ? (
+              <DetailsSection closeDetails={() => setOpenDetails(false)} />
+            ) : null}
+          </div>
+        </SearchContext.Provider>
+      </LoadingContext.Provider>
+    </SearchResultsContext.Provider>
   );
 }
 

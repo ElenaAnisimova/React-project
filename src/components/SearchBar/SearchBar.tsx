@@ -12,11 +12,12 @@ export default function SearchBar({
   className,
 }: SearchBarProps) {
   const { query, setQuery } = useContext(SearchContext);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-
     setQuery(event.target.value);
   };
+
   return (
     <form>
       <input
@@ -26,8 +27,8 @@ export default function SearchBar({
         onChange={handleInputChange}
         placeholder={placeholder}
       />
-      <SearchButton sendRequest={sendRequest} text="Search"></SearchButton>
-      <ErrorButton makeError={makeError} text="Try Error"></ErrorButton>
+      <SearchButton sendRequest={sendRequest}>Search</SearchButton>
+      <ErrorButton makeError={makeError}>Try Error</ErrorButton>
     </form>
   );
 }
