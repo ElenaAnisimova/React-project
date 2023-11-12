@@ -8,7 +8,7 @@ export type SearchResultType = {
 };
 
 export type SearchResultProps = {
-  searchResults: SearchResultType[];
+  // searchResults: SearchResultType[];
   isSearchLoading: boolean;
   showDetails: (id: string) => void;
 };

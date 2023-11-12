@@ -1,9 +1,14 @@
 import { ButtonProps } from './ButtonTypes';
 
-export const CloseButton = ({ text, closeDetails }: ButtonProps) => {
+export const CloseButton = ({ closeDetails, children }: ButtonProps) => {
   return (
-    <button onClick={closeDetails} className="page-btn" type="button">
-      {text}
+    <button
+      onClick={closeDetails}
+      aria-label="close-button"
+      className="page-btn"
+      type="button"
+    >
+      {children}
     </button>
   );
 };

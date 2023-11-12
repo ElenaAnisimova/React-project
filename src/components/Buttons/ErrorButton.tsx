@@ -1,9 +1,9 @@
 import { ButtonProps } from './ButtonTypes';
 
-export const ErrorButton = ({ text, makeError }: ButtonProps) => {
+export const ErrorButton = ({ makeError, children }: ButtonProps) => {
   return (
     <button onClick={makeError} className="page-btn" type="button">
-      {text}
+      {children}
     </button>
   );
 };
