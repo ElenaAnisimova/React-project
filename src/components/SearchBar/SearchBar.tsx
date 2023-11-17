@@ -1,8 +1,6 @@
 import { SearchButton } from '../Buttons/SearchButton';
 import { ErrorButton } from '../Buttons/ErrorButton';
 import { SearchBarProps } from './SearchBarTypes';
-// import { useContext } from 'react';
-// import { SearchContext } from '../../ulits/states/SearchContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../ulits/states/store';
 import { setQuery } from '../../ulits/states/reducers';
@@ -14,7 +12,6 @@ export default function SearchBar({
   type,
   className,
 }: SearchBarProps) {
-  // const { query, setQuery } = useContext(SearchContext);
   const query = useSelector((state: RootState) => state.search.query);
   const dispatch = useDispatch();
 

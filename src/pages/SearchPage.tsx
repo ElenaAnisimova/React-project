@@ -13,16 +13,13 @@ import {
 import Pagination from '../components/Pagination/Pagination';
 import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
 import DetailsSection from '../components/DetailsSection/DetailsSection';
-import {
-  SearchContext,
-  SearchResultsContext,
-} from '../ulits/states/SearchContext';
+import { SearchResultsContext } from '../ulits/states/SearchContext';
 import { LoadingContext } from '../ulits/states/LoadingContext';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { setQuery } from '../ulits/states/store';
+import { useSelector } from 'react-redux';
+import { RootState } from '../ulits/states/store';
 
 export function SearchPage() {
-  const [query, setQuery] = useState('');
+  const query = useSelector((state: RootState) => state.search.query);
   const [searchResults, setSearchResults] = useState<SearchResultType[]>([]);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [areDetailsLoading, setAreDetailsLoading] = useState(false);
@@ -148,33 +145,31 @@ export function SearchPage() {
       <LoadingContext.Provider
         value={{ areDetailsLoading, setAreDetailsLoading }}
       >
-        <SearchContext.Provider value={{ query, setQuery }}>
-          <div onClick={handleClick}>
-            <SearchBar
-              className="search-input"
-              type="text"
-              query={query}
-              placeholder={placeholderText}
-              sendRequest={sendRequest}
-              makeError={makeError}
-            ></SearchBar>
-            <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
-            <SearchResults
-              isSearchLoading={isSearchLoading}
-              showDetails={showDetails}
+        <div onClick={handleClick}>
+          <SearchBar
+            className="search-input"
+            type="text"
+            query={query}
+            placeholder={placeholderText}
+            sendRequest={sendRequest}
+            makeError={makeError}
+          ></SearchBar>
+          <ItemsSelect getValue={changeItemsLimit}></ItemsSelect>
+          <SearchResults
+            isSearchLoading={isSearchLoading}
+            showDetails={showDetails}
+          />
+          {isSearchLoading ? null : (
+            <Pagination
+              currentPage={currentPage}
+              changePage={changePage}
+              totalPages={totalPages}
             />
-            {isSearchLoading ? null : (
-              <Pagination
-                currentPage={currentPage}
-                changePage={changePage}
-                totalPages={totalPages}
-              />
-            )}
-            {openDetails ? (
-              <DetailsSection closeDetails={() => setOpenDetails(false)} />
-            ) : null}
-          </div>
-        </SearchContext.Provider>
+          )}
+          {openDetails ? (
+            <DetailsSection closeDetails={() => setOpenDetails(false)} />
+          ) : null}
+        </div>
       </LoadingContext.Provider>
     </SearchResultsContext.Provider>
   );
