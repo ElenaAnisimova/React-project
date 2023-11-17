@@ -10,6 +10,8 @@ export const currentItemIDInitial = {
   _id: '',
 };
 
-export const DEFAULT_TOTAL_PAGES = 0;
-export const DEFAULT_LIMIT = 10;
-export const DEFAULT_CURRENT_PAGE = 1;
+export const DEFAULT_VALUES = {
+  DEFAULT_TOTAL_PAGES: 0,
+  DEFAULT_LIMIT: 10,
+  DEFAULT_CURRENT_PAGE: 1,
+};

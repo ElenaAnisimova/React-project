@@ -2,8 +2,8 @@ import { useContext } from 'react';
 import { DetailedSectionProps } from './DetailsSectionTypes';
 import { CloseButton } from '../Buttons/CloseButton';
 import DetailsLoader from '../Loaders/DetailsLoader';
-import { LoadingContext } from '../../ulits/contexts/LoadingContext';
-import { SearchResultsContext } from '../../ulits/contexts/SearchContext';
+import { LoadingContext } from '../../ulits/states/LoadingContext';
+import { SearchResultsContext } from '../../ulits/states/SearchContext';
 
 export default function DetailsSection({ closeDetails }: DetailedSectionProps) {
   const { areDetailsLoading } = useContext(LoadingContext);

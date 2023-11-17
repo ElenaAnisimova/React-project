@@ -8,9 +8,7 @@ import SearchResults from '../components/SearchResults/SearchResults';
 import {
   placeholderText,
   currentItemIDInitial,
-  DEFAULT_TOTAL_PAGES,
-  DEFAULT_LIMIT,
-  DEFAULT_CURRENT_PAGE,
+  DEFAULT_VALUES,
 } from './SearchPageVariables';
 import Pagination from '../components/Pagination/Pagination';
 import ItemsSelect from '../components/ItemsPerPage/ItemsSelect';
@@ -18,8 +16,10 @@ import DetailsSection from '../components/DetailsSection/DetailsSection';
 import {
   SearchContext,
   SearchResultsContext,
-} from '../ulits/contexts/SearchContext';
-import { LoadingContext } from '../ulits/contexts/LoadingContext';
+} from '../ulits/states/SearchContext';
+import { LoadingContext } from '../ulits/states/LoadingContext';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { setQuery } from '../ulits/states/store';
 
 export function SearchPage() {
   const [query, setQuery] = useState('');
@@ -27,9 +27,13 @@ export function SearchPage() {
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [areDetailsLoading, setAreDetailsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [totalPages, setTotalPages] = useState(DEFAULT_TOTAL_PAGES);
-  const [limit, setLimit] = useState(DEFAULT_LIMIT);
-  const [currentPage, setCurrentPage] = useState(DEFAULT_CURRENT_PAGE);
+  const [totalPages, setTotalPages] = useState(
+    DEFAULT_VALUES.DEFAULT_TOTAL_PAGES
+  );
+  const [limit, setLimit] = useState(DEFAULT_VALUES.DEFAULT_LIMIT);
+  const [currentPage, setCurrentPage] = useState(
+    DEFAULT_VALUES.DEFAULT_CURRENT_PAGE
+  );
   const [openDetails, setOpenDetails] = useState(false);
   const [currentItemID, setCurrentItemID] = useState('');
   const [currentItem, setCurrentItem] =

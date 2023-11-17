@@ -1,8 +1,11 @@
 import { SearchButton } from '../Buttons/SearchButton';
 import { ErrorButton } from '../Buttons/ErrorButton';
 import { SearchBarProps } from './SearchBarTypes';
-import { useContext } from 'react';
-import { SearchContext } from '../../ulits/contexts/SearchContext';
+// import { useContext } from 'react';
+// import { SearchContext } from '../../ulits/states/SearchContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../ulits/states/store';
+import { setQuery } from '../../ulits/states/reducers';
 
 export default function SearchBar({
   placeholder,
@@ -11,11 +14,13 @@ export default function SearchBar({
   type,
   className,
 }: SearchBarProps) {
-  const { query, setQuery } = useContext(SearchContext);
+  // const { query, setQuery } = useContext(SearchContext);
+  const query = useSelector((state: RootState) => state.search.query);
+  const dispatch = useDispatch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setQuery(event.target.value);
+    dispatch(setQuery(event.target.value));
   };
 
   return (

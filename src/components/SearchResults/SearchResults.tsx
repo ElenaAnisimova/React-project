@@ -1,7 +1,7 @@
 import Loader from '../Loaders/Loader';
 import { useContext } from 'react';
 import { SearchResultProps } from './SearchResultsTypes';
-import { SearchResultsContext } from '../../ulits/contexts/SearchContext';
+import { SearchResultsContext } from '../../ulits/states/SearchContext';
 
 export default function SearchResults({
   isSearchLoading,
