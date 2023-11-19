@@ -4,13 +4,13 @@ interface SearchQueryState {
   query: string;
 }
 
-const initialState: SearchQueryState = {
+const initialStateQuery: SearchQueryState = {
   query: '',
 };
 
-const searchSlice = createSlice({
+const searchQuerySlice = createSlice({
   name: 'search',
-  initialState,
+  initialState: initialStateQuery,
   reducers: {
     setQuery: (state, action: PayloadAction<string>) => {
       state.query = action.payload;
@@ -18,5 +18,26 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setQuery } = searchSlice.actions;
-export const searchQueryReducer = searchSlice.reducer;
+export const { setQuery } = searchQuerySlice.actions;
+export const searchQueryReducer = searchQuerySlice.reducer;
+
+interface SearchLimitState {
+  limit: number;
+}
+
+const initialStateLimit: SearchLimitState = {
+  limit: 10,
+};
+
+const searchLimitSlice = createSlice({
+  name: 'limit',
+  initialState: initialStateLimit,
+  reducers: {
+    setLimit: (state, action: PayloadAction<number>) => {
+      state.limit = action.payload;
+    },
+  },
+});
+
+export const { setLimit } = searchLimitSlice.actions;
+export const searchLimitReducer = searchLimitSlice.reducer;
