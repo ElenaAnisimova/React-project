@@ -1,19 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { ItemsSelectProps } from './ItemsSelectTypes';
 import { PAGINATION_FILTERS } from './ItemsSelectVariables';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../ulits/states/store';
-import { setLimit } from '../../ulits/states/reducers';
+import { useDispatch } from 'react-redux';
+import { setLimit } from '../../ulits/states/reducers/limitReducers';
+import { setCurrPage } from '../../ulits/states/reducers/pageReducers';
+import { useNavigate } from 'react-router';
 
 export default function ItemsSelect() {
   const dispatch = useDispatch();
-  const limit = useSelector((state: RootState) => state.limit.limit);
+  const navigate = useNavigate();
   function changeItemsLimit(event: React.ChangeEvent<HTMLSelectElement>) {
     dispatch(setLimit(Number(event.target.value)));
-    console.log(limit);
-
-    // setCurrentPage(1);
-    // navigate(`/results/${1}`);
+    dispatch(setCurrPage(1));
+    navigate(`/results/1`);
   }
   return (
     <div className="per-page">

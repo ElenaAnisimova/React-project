@@ -1,11 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { searchLimitReducer, searchQueryReducer } from './reducers';
-import { dataAPI } from '../api';
+import { searchQueryReducer } from './reducers/queryReducers';
+import { searchLimitReducer } from './reducers/limitReducers';
+import { currPageReducer } from './reducers/pageReducers';
+import { totalPagesReducer } from './reducers/totalPagesReducers';
+import { currCharacterReducer } from './reducers/currCharacterReducers';
+import { openDetailsReducer } from './reducers/openDetailsReducers';
+import { hasErrorReducer } from './reducers/ErrorReducers';
+import { dataAPI } from '../API/api';
 
 export const store = configureStore({
   reducer: {
     search: searchQueryReducer,
     limit: searchLimitReducer,
+    page: currPageReducer,
+    totalPages: totalPagesReducer,
+    currCharacter: currCharacterReducer,
+    openDetails: openDetailsReducer,
+    hasError: hasErrorReducer,
     [dataAPI.reducerPath]: dataAPI.reducer,
   },
   middleware: (getDefaultMiddleware) =>
