@@ -6,7 +6,6 @@ import DetailsSection from '../components/DetailsSection/DetailsSection';
 import { useSelector } from 'react-redux';
 import { RootState } from '../ulits/states/store';
 import { useEffect } from 'react';
-// import Loader from '../components/Loaders/Loader';
 
 export function SearchPage() {
   // useEffect(() => {
@@ -21,12 +20,6 @@ export function SearchPage() {
     }
   }, [hasError]);
 
-  // async function sendRequest() {
-  //   setCurrentPage(1);
-  //   getSearchResults(query, limit, currentPage);
-  //   navigate('/results/1');
-  //   localStorage.setItem('searchQuery', query.trim());
-  // }
   const openDetails = useSelector(
     (state: RootState) => state.openDetails.openDetails
   );
@@ -36,7 +29,6 @@ export function SearchPage() {
       <ItemsSelect></ItemsSelect>
       <SearchResults />
       <Pagination />
-      {/* <DetailsSection /> */}
       {openDetails ? <DetailsSection /> : null}
     </div>
   );

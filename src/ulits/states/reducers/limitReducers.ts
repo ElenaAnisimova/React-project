@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DEFAULT_VALUES } from '../../../pages/SearchPageVariables';
 
 interface SearchLimitState {
   limit: number;
 }
 
 const initialStateLimit: SearchLimitState = {
-  limit: 10,
+  limit: DEFAULT_VALUES.DEFAULT_LIMIT,
 };
 
 const searchLimitSlice = createSlice({

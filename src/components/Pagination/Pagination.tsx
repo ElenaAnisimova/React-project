@@ -10,7 +10,7 @@ export default function Pagination() {
   const limit = useSelector((state: RootState) => state.limit.limit);
   const currPage = useSelector((state: RootState) => state.page.currPage);
   const navigate = useNavigate();
-  const { data, isLoading } = dataAPI.useFetchAllCharactersQuery({
+  const { data, isLoading, isFetching } = dataAPI.useFetchAllCharactersQuery({
     searchStr: query,
     limit,
     page: currPage,
@@ -24,7 +24,7 @@ export default function Pagination() {
   };
   return (
     <div className="pagination__wrapper">
-      {isLoading
+      {isLoading || isFetching
         ? null
         : pagesArr.map((page) => (
             <button

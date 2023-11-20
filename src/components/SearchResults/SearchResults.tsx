@@ -11,7 +11,7 @@ export default function SearchResults() {
   const limit = useSelector((state: RootState) => state.limit.limit);
   const currPage = useSelector((state: RootState) => state.page.currPage);
   const dispatch = useDispatch();
-  const { data, isLoading } = dataAPI.useFetchAllCharactersQuery({
+  const { data, isLoading, isFetching } = dataAPI.useFetchAllCharactersQuery({
     searchStr: query,
     limit,
     page: currPage,
@@ -24,7 +24,7 @@ export default function SearchResults() {
 
   return (
     <div className="wrapper">
-      {isLoading ? (
+      {isLoading || isFetching ? (
         <Loader />
       ) : (
         data &&

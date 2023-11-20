@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DEFAULT_VALUES } from '../../../pages/SearchPageVariables';
 
 interface TotalPagesState {
   totalPages: number;
 }
 
 const initialStatePages: TotalPagesState = {
-  totalPages: 0,
+  totalPages: DEFAULT_VALUES.DEFAULT_TOTAL_PAGES,
 };
 
 const TotalPagesSlice = createSlice({

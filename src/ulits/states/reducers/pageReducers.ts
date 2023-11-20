@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DEFAULT_VALUES } from '../../../pages/SearchPageVariables';
 
 interface currPageState {
   currPage: number;
 }
 
 const initialStatePage: currPageState = {
-  currPage: 1,
+  currPage: DEFAULT_VALUES.DEFAULT_CURRENT_PAGE,
 };
 
 const currPageSlice = createSlice({
