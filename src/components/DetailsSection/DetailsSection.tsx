@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../ulits/states/store';
 import { setOpenDetails } from '../../ulits/states/reducers/openDetailsReducers';
 import { useDispatch } from 'react-redux';
+
 export default function DetailsSection() {
   const currCharacter = useSelector(
     (state: RootState) => state.currCharacter.currCharacter

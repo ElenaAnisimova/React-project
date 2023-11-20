@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Code coverage report for components/Buttons/CloseButton.tsx</title>
+    <title>Code coverage report for components/SearchItem/SearchItem.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
       <div class="pad1">
         <h1>
           <a href="../../index.html">All files</a> /
-          <a href="index.html">components/Buttons</a> CloseButton.tsx
+          <a href="index.html">components/SearchItem</a> SearchItem.tsx
         </h1>
         <div class="clearfix">
           <div class="fl pad1y space-right2">
@@ -37,13 +37,13 @@
           <div class="fl pad1y space-right2">
             <span class="strong">100% </span>
             <span class="quiet">Functions</span>
-            <span class="fraction">1/1</span>
+            <span class="fraction">2/2</span>
           </div>
 
           <div class="fl pad1y space-right2">
             <span class="strong">100% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">2/2</span>
+            <span class="fraction">3/3</span>
           </div>
         </div>
         <p class="quiet">
@@ -73,13 +73,27 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -87,20 +101,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ButtonProps } from './ButtonTypes';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SearchItemProps } from './SearchItemProps';
 &nbsp;
-export const CloseButton = ({ closeDetails, children }: ButtonProps) =&gt; {
+function SearchItem({
+  showDetails,
+  searchResults,
+  key: index,
+}: SearchItemProps) {
   return (
-    &lt;button
-      onClick={closeDetails}
-      aria-label="close-button"
-      className="page-btn"
-      type="button"
+    &lt;div
+      className="search-item"
+      key={index}
+      onClick={() =&gt; showDetails(searchResults._id)}
     &gt;
-      {children}
-    &lt;/button&gt;
+      &lt;h4&gt;{searchResults.name}&lt;/h4&gt;
+      &lt;p&gt;Race: {searchResults.race}&lt;/p&gt;
+      &lt;p&gt;Birth year: {searchResults.birth}&lt;/p&gt;
+      &lt;p&gt;Height: {searchResults.height}&lt;/p&gt;
+      &lt;p&gt;Spouse: {searchResults.spouse}&lt;/p&gt;
+    &lt;/div&gt;
   );
-};
+}
+&nbsp;
+export default SearchItem;
 &nbsp;</pre></td></tr></table></pre>
 
       <div class="push"></div>

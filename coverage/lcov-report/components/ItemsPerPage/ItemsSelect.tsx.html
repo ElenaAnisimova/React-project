@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>
-      Code coverage report for components/DetailsSection/DetailsSection.tsx
+      Code coverage report for components/ItemsPerPage/ItemsSelect.tsx
     </title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
@@ -21,31 +21,31 @@
       <div class="pad1">
         <h1>
           <a href="../../index.html">All files</a> /
-          <a href="index.html">components/DetailsSection</a> DetailsSection.tsx
+          <a href="index.html">components/ItemsPerPage</a> ItemsSelect.tsx
         </h1>
         <div class="clearfix">
           <div class="fl pad1y space-right2">
-            <span class="strong">66.66% </span>
+            <span class="strong">84.61% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">6/9</span>
+            <span class="fraction">11/13</span>
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">0% </span>
+            <span class="strong">100% </span>
             <span class="quiet">Branches</span>
-            <span class="fraction">0/2</span>
+            <span class="fraction">0/0</span>
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">0% </span>
+            <span class="strong">100% </span>
             <span class="quiet">Functions</span>
-            <span class="fraction">0/1</span>
+            <span class="fraction">3/3</span>
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">66.66% </span>
+            <span class="strong">84.61% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">6/9</span>
+            <span class="fraction">11/13</span>
           </div>
         </div>
         <p class="quiet">
@@ -59,7 +59,7 @@
           </div>
         </template>
       </div>
-      <div class="status-line medium"></div>
+      <div class="status-line high"></div>
       <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -93,8 +93,11 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -102,7 +105,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -111,6 +115,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,39 +123,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useContext } from 'react';
-import { DetailedSectionProps } from './DetailsSectionTypes';
-import { CloseButton } from '../Buttons/CloseButton';
-import DetailsLoader from '../Loaders/DetailsLoader';
-import { LoadingContext } from '../../ulits/contexts/LoadingContext';
-import { SearchResultsContext } from '../../ulits/contexts/SearchContext';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PAGINATION_FILTERS } from './ItemsSelectVariables';
+import { useDispatch } from 'react-redux';
+import { setLimit } from '../../ulits/states/reducers/limitReducers';
+import { setCurrPage } from '../../ulits/states/reducers/pageReducers';
+import { useNavigate } from 'react-router';
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >DetailsSection(</span>{ closeDetails }: DetailedSectionProps) {
-  const { areDetailsLoading } = <span class="cstat-no" title="statement not covered" >useContext(LoadingContext);</span>
-  const { currentItem } = <span class="cstat-no" title="statement not covered" >useContext(SearchResultsContext);</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div className="background" data-testid="aside-details"&gt;
-      &lt;aside className="details"&gt;
-        &lt;CloseButton closeDetails={closeDetails} text="Close Details" /&gt;
-        {areDetailsLoading ? (
-          &lt;div className="loader-wrapper"&gt;
-            &lt;DetailsLoader&gt;&lt;/DetailsLoader&gt;
-          &lt;/div&gt;
-        ) : (
-          &lt;div className="search-item__detailed"&gt;
-            &lt;h4&gt;{currentItem.name}&lt;/h4&gt;
-            &lt;p&gt;Race: {currentItem.race}&lt;/p&gt;
-            &lt;p&gt;Birth year: {currentItem.birth}&lt;/p&gt;
-            &lt;p&gt;Height: {currentItem.height}&lt;/p&gt;
-            &lt;p&gt;Spouse: {currentItem.spouse}&lt;/p&gt;
-          &lt;/div&gt;
-        )}
-      &lt;/aside&gt;
+export default function ItemsSelect() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  function changeItemsLimit(event: React.ChangeEvent&lt;HTMLSelectElement&gt;) {
+    dispatch(setLimit(Number(event.target.value)));
+<span class="cstat-no" title="statement not covered" >    dispatch(setCurrPage(1));</span>
+<span class="cstat-no" title="statement not covered" >    navigate(`/results/1`);</span>
+  }
+  return (
+    &lt;div className="per-page"&gt;
+      &lt;p&gt;Items per page:&lt;/p&gt;
+      &lt;select
+        data-testid="items-select"
+        defaultValue={10}
+        onChange={changeItemsLimit}
+      &gt;
+        {PAGINATION_FILTERS.map((item, i) =&gt; (
+          &lt;option key={i} value={item}&gt;
+            {item}
+          &lt;/option&gt;
+        ))}
+      &lt;/select&gt;
     &lt;/div&gt;
   );
 }
@@ -168,7 +168,7 @@ export default function <span class="fstat-no" title="function not covered" >Det
         rel="noopener noreferrer"
         >istanbul</a
       >
-      at 2023-11-12T10:01:46.706Z
+      at 2023-11-20T13:05:58.965Z
     </div>
     <script src="../../prettify.js"></script>
     <script>

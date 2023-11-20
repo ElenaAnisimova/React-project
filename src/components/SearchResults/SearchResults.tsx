@@ -1,4 +1,5 @@
 import Loader from '../Loaders/Loader';
+import SearchItem from '../SearchItem/SearchItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../ulits/states/store';
 import { dataAPI } from '../../ulits/API/api';
@@ -29,17 +30,11 @@ export default function SearchResults() {
       ) : (
         data &&
         data.docs.map((result, index: number) => (
-          <div
-            className="search-item"
+          <SearchItem
             key={index}
-            onClick={() => showDetails(result._id)}
-          >
-            <h4>{result.name}</h4>
-            <p>Race: {result.race}</p>
-            <p>Birth year: {result.birth}</p>
-            <p>Height: {result.height}</p>
-            <p>Spouse: {result.spouse}</p>
-          </div>
+            searchResults={result}
+            showDetails={showDetails}
+          />
         ))
       )}
     </div>

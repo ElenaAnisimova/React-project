@@ -15,7 +15,11 @@ export default function ItemsSelect() {
   return (
     <div className="per-page">
       <p>Items per page:</p>
-      <select defaultValue={10} onChange={changeItemsLimit}>
+      <select
+        data-testid="items-select"
+        defaultValue={10}
+        onChange={changeItemsLimit}
+      >
         {PAGINATION_FILTERS.map((item, i) => (
           <option key={i} value={item}>
             {item}
