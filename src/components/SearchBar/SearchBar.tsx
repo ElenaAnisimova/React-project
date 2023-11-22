@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { setCurrPage } from '../../ulits/states/reducers/pageReducers';
 import { setHasError } from '../../ulits/states/reducers/ErrorReducers';
+import { DEFAULT_VALUES } from '../../pages/SearchPageVariables';
 export default function SearchBar() {
   const [currQuery, setCurrQuery] = useState('');
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ export default function SearchBar() {
 
   function sendRequest() {
     dispatch(setQuery(currQuery));
-    dispatch(setCurrPage(1));
-    navigate(`/results/1`);
+    dispatch(setCurrPage(DEFAULT_VALUES.DEFAULT_CURRENT_PAGE));
+    navigate(`/results/${DEFAULT_VALUES.DEFAULT_CURRENT_PAGE}`);
   }
   return (
     <form>

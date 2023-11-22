@@ -8,11 +8,6 @@ import { RootState } from '../ulits/states/store';
 import { useEffect } from 'react';
 
 export function SearchPage() {
-  // useEffect(() => {
-  //   const savedQuery = localStorage.getItem('searchQuery');
-  //   const queryString = savedQuery ? savedQuery : query;
-  //   getSearchResults(queryString, limit, currentPage);
-  // }, []);
   const hasError = useSelector((state: RootState) => state.hasError.hasError);
   useEffect(() => {
     if (hasError) {
