@@ -6,9 +6,3 @@ export type SearchResultType = {
   spouse: string;
   _id: string;
 };
-
-export type SearchResultProps = {
-  // searchResults: SearchResultType[];
-  isSearchLoading: boolean;
-  showDetails: (id: string) => void;
-};

@@ -1,31 +1,39 @@
 import { SearchButton } from '../Buttons/SearchButton';
 import { ErrorButton } from '../Buttons/ErrorButton';
-import { SearchBarProps } from './SearchBarTypes';
-import { useContext } from 'react';
-import { SearchContext } from '../../ulits/contexts/SearchContext';
-
-export default function SearchBar({
-  placeholder,
-  sendRequest,
-  makeError,
-  type,
-  className,
-}: SearchBarProps) {
-  const { query, setQuery } = useContext(SearchContext);
-
+import { placeholderText } from '../../pages/SearchPageVariables';
+import { useDispatch } from 'react-redux';
+import { setQuery } from '../../ulits/states/reducers/queryReducers';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { setCurrPage } from '../../ulits/states/reducers/pageReducers';
+import { setHasError } from '../../ulits/states/reducers/ErrorReducers';
+import { DEFAULT_VALUES } from '../../pages/SearchPageVariables';
+export default function SearchBar() {
+  const [currQuery, setCurrQuery] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setQuery(event.target.value);
+    setCurrQuery(event.target.value);
+  };
+  const makeError = () => {
+    dispatch(setHasError(true));
+    throw new Error('New Error');
   };
 
+  function sendRequest() {
+    dispatch(setQuery(currQuery));
+    dispatch(setCurrPage(DEFAULT_VALUES.DEFAULT_CURRENT_PAGE));
+    navigate(`/results/${DEFAULT_VALUES.DEFAULT_CURRENT_PAGE}`);
+  }
   return (
     <form>
       <input
-        type={type}
-        className={className}
-        value={query}
+        type="text"
+        className="search-input"
+        value={currQuery}
         onChange={handleInputChange}
-        placeholder={placeholder}
+        placeholder={placeholderText}
       />
       <SearchButton sendRequest={sendRequest}>Search</SearchButton>
       <ErrorButton makeError={makeError}>Try Error</ErrorButton>
