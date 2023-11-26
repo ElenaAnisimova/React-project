@@ -1,15 +1,19 @@
+import Footer from "./Footer";
+import Header from "./Header";
 import React from "react";
-import SearchBar from "./SearchBar";
 
 export type LayoutProps = {
   children: React.ReactNode;
 };
 
-
-function Layout({ children} : LayoutProps) {
-  return <div>
-    <SearchBar />
-    {children}</div>;
-}
+const Layout = ({ children }: LayoutProps) => {
+  return (
+    <div className="content">
+      <Header />
+      {children}
+      <Footer />
+    </div>
+  );
+};
 
 export default Layout;
