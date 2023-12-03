@@ -1,60 +1,22 @@
-// import React from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { countriesArray } from '../utils/countriesArr';
+import countriesArray from '../utils/constants/countriesArr';
+import schema from '../utils/constants/schema';
+import { useDispatch } from 'react-redux';
+// import { RootState } from '../utils/store/store';
+import { setData } from '../utils/store/reducers/dataSlice';
+import { FormDataType, Base64FormDataType } from '../types/types';
+import { convertPhoto } from '../utils/helpers/convertPhoto';
+import { useNavigate } from 'react-router';
 
 function Form() {
-  const MAX_IMAGE_SIZE = 1048576; // 1Mb
-  const schema = yup.object().shape({
-    fullName: yup
-      .string()
-      .matches(/^[A-Z].*/, 'The first letter should be uppercased')
-      .required('Your full name is requeired!'),
-    email: yup
-      .string()
-      .email('Invalid email address')
-      .required('Email is required!'),
-    age: yup
-      .number()
-      .required('Please choose your age')
-      .positive('Age should be above 0')
-      .integer('Age should be an integer'),
-    password: yup
-      .string()
-      .min(4)
-      .max(24)
-      .matches(/[A-Z]/, 'Password should have at least 1 uppercase letter')
-      .matches(/[a-z]/, 'Password should have at least 1 lowercase letter')
-      .matches(/[0-9]/, 'Password should have at least 1 number')
-      .matches(
-        /[@$!%*#?&]/,
-        'Password should have at least 1 special character'
-      )
-      .required(),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password')], "Passwords don't match")
-      .required(),
-    gender: yup.string().required(),
-    country: yup.string().required(),
-    terms: yup
-      .boolean()
-      .oneOf([true])
-      .required('Accept Terms & Conditions is required'),
-    image: yup
-      .mixed()
-      .required('Photo is required')
-      .test('fileSize', 'Photo size is too big', (photo) => {
-        const image = photo as File;
-        return image && image.size <= MAX_IMAGE_SIZE;
-      }),
-  });
-
+  // const currentData = useSelector((state: RootState) => state.data);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     trigger,
     setValue,
   } = useForm({
@@ -62,22 +24,24 @@ function Form() {
     mode: 'onChange',
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: FormDataType) => {
     console.log(data);
+    if (data.image instanceof File) {
+      const convertedPhoto = await convertPhoto(data.image);
+      const formData: Base64FormDataType = { ...data, image: convertedPhoto };
+      dispatch(setData([formData]));
+      navigate('/');
+    }
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0] instanceof File) {
-      // const file = event.target.files[0];
-      //  setImagePreview(URL.createObjectURL(file));
-      console.log(event.target.files[0].size);
       setValue('image', event.target.files[0]);
       trigger('image');
     }
   };
   return (
-    <form className="form" onSubmit={handleSubmit(onSubmit)} action="">
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
       <input
         type="text"
         {...register('fullName')}
@@ -95,7 +59,6 @@ function Form() {
         {...register('age')}
       />
       <label className="error-label" htmlFor="age-input">
-        {' '}
         {errors.age?.message}
       </label>
 
@@ -106,7 +69,6 @@ function Form() {
         {...register('email')}
       />
       <label className="error-label" htmlFor="email-input">
-        {' '}
         {errors.email?.message}
       </label>
 
@@ -130,11 +92,7 @@ function Form() {
         {errors.confirmPassword?.message}
       </label>
 
-      <select
-        // onChange={handleChange}
-        {...register('gender')}
-        id="gender-input"
-      >
+      <select {...register('gender')} id="gender-input">
         <option value="">Choose your gender</option>
         <option value="male">Male</option>
         <option value="female">Female</option>
@@ -175,16 +133,12 @@ function Form() {
         type="file"
         accept="image/png, image/jpeg"
         id="image-input"
-        // {...register('image')}
         onChange={handleImageChange}
       />
       <label className="error-label" htmlFor="image-input">
         {errors.image?.message}
       </label>
-      <button
-        type="submit"
-        // disabled={!isValid}
-      >
+      <button type="submit" disabled={!isValid}>
         Submit form
       </button>
     </form>

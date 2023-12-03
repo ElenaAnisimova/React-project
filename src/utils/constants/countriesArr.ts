@@ -1,4 +1,4 @@
-export const countriesArray = [
+const countriesArray = [
   'Afghanistan',
   'Albania',
   'Algeria',
@@ -239,3 +239,4 @@ export const countriesArray = [
   'Zambia',
   'Zimbabwe',
 ];
+export default countriesArray;
