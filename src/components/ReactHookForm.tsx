@@ -1,16 +1,14 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import countriesArray from '../utils/constants/countriesArr';
-import schema from '../utils/constants/schema';
+import schema from '../utils/helpers/schema';
 import { useDispatch } from 'react-redux';
-// import { RootState } from '../utils/store/store';
 import { setData } from '../utils/store/reducers/dataSlice';
 import { FormDataType, Base64FormDataType } from '../types/types';
 import { convertPhoto } from '../utils/helpers/convertPhoto';
 import { useNavigate } from 'react-router';
 
-function Form() {
-  // const currentData = useSelector((state: RootState) => state.data);
+function ReactHookForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -25,7 +23,6 @@ function Form() {
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
     if (data.image instanceof File) {
       const convertedPhoto = await convertPhoto(data.image);
       const formData: Base64FormDataType = { ...data, image: convertedPhoto };
@@ -40,8 +37,10 @@ function Form() {
       trigger('image');
     }
   };
+
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <h2>Please fill in the form</h2>
       <input
         type="text"
         {...register('fullName')}
@@ -72,6 +71,10 @@ function Form() {
         {errors.email?.message}
       </label>
 
+      <label htmlFor="password-input">
+        Password should contain 1 number, 1 uppercased letter, 1 lowercased
+        letter, 1 special character
+      </label>
       <input
         type="password"
         id="password-input"
@@ -103,6 +106,7 @@ function Form() {
 
       <input
         {...register('country')}
+        type="text"
         placeholder="Choose your country"
         id="country-input"
         list="country-choice"
@@ -118,10 +122,12 @@ function Form() {
         {errors.country?.message}
       </label>
 
-      <label className="label" htmlFor="terms-input">
-        Accept Terms&Conditions
-      </label>
-      <input {...register('terms')} type="checkbox" id="terms-input" />
+      <div className="input-wrapper">
+        <input {...register('terms')} type="checkbox" id="terms-input" />
+        <label className="label" htmlFor="terms-input">
+          Accept Terms&Conditions
+        </label>
+      </div>
       <label className="error-label" htmlFor="terms-input">
         {errors.terms?.message}
       </label>
@@ -145,4 +151,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default ReactHookForm;

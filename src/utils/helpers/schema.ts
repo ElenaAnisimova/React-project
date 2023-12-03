@@ -41,6 +41,10 @@ const schema = yup.object().shape({
     .test('fileSize', 'Photo size is too big', (photo) => {
       const image = photo as File;
       return image && image.size <= MAX_IMAGE_SIZE;
+    })
+    .test('fileType', 'Please choose PNG or JPEG image', (photo) => {
+      const image = photo as File;
+      return image && ['image/png', 'image/jpeg'].includes(image.type);
     }),
 });
 

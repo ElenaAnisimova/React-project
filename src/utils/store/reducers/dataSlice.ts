@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FormDataType } from '../../../types/types';
+import { Base64FormDataType } from '../../../types/types';
 
-const initialState: { data: FormDataType[] } = {
+const initialState: { data: Base64FormDataType[] } = {
   data: [],
 };
 
@@ -9,7 +9,7 @@ const reactHookDataSlice = createSlice({
   name: 'data',
   initialState,
   reducers: {
-    setData: (state, action: PayloadAction<FormDataType[]>) => {
+    setData: (state, action: PayloadAction<Base64FormDataType[]>) => {
       state.data = action.payload;
     },
   },

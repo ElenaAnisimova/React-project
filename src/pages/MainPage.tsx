@@ -14,10 +14,16 @@ function MainPage() {
         <Link to="/react-hook-form">React hook form</Link>
       </div>
       {currentData.data.map((item, i) => (
-        <section key={i}>
-          <p>{item.fullName}</p>
-          <p>{item.age}</p>
-          <p>{item.email}</p>
+        <section key={i} className="data-tile">
+          <p>Name: {item.fullName}</p>
+          <p>Age: {item.age}</p>
+          <p>E-mail: {item.email}</p>
+          <p>Password: {item.password}</p>
+          <p>Password confirmation: {item.confirmPassword}</p>
+          <p>Gender: {item.gender}</p>
+          <p>Country: {item.country}</p>
+          <p>Accepted Terms & Conditions: {String(item.terms)}</p>
+          <img src={item.image} alt="your-photo" />
         </section>
       ))}
     </div>

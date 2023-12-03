@@ -1,8 +1,8 @@
 import App from '../App';
 import { createBrowserRouter } from 'react-router-dom';
 import MainPage from '../pages/MainPage';
-import ReactHookForm from '../pages/ReactHookForm';
-import UncontrolledForm from '../pages/UncontrolledForm';
+import ReactHookFormPage from '../pages/ReactHookFormPage';
+import UncontrolledForm from '../pages/UncontrolledFormPage';
 
 const routes = [
   {
@@ -15,7 +15,7 @@ const routes = [
       },
       {
         path: 'react-hook-form',
-        element: <ReactHookForm />,
+        element: <ReactHookFormPage />,
       },
       {
         path: '/uncontrolled-form',
