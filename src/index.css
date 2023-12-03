@@ -66,3 +66,17 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.error-label {
+  color: darkred;
+}
+
+.label {
+  text-align: left;
+}
+
+.nav-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
