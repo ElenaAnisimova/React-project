@@ -87,10 +87,17 @@ button:focus-visible {
   gap: 1.5rem;
 }
 
+.tiles-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
 .data-tile {
-  border: 1px solid #1a1a1a;
+  border-radius: 5px;
   padding: 0.5rem;
   text-align: left;
+  background-color: rgb(238, 247, 255);
 }
 
 input[type='text'],

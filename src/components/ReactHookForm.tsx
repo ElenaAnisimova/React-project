@@ -40,7 +40,6 @@ function ReactHookForm() {
 
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)}>
-      <h2>Please fill in the form</h2>
       <input
         type="text"
         {...register('fullName')}

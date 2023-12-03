@@ -69,7 +69,6 @@ function UncontrolledForm() {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <h2>Please fill in the form</h2>
       <input
         type="text"
         id="name-input"
