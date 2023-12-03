@@ -7,6 +7,7 @@ import { setData } from '../utils/store/reducers/dataSlice';
 import { FormDataType, Base64FormDataType } from '../types/types';
 import { convertPhoto } from '../utils/helpers/convertPhoto';
 import { useNavigate } from 'react-router';
+import { setEffect } from '../utils/store/reducers/newTileEffectlice';
 
 function ReactHookForm() {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ function ReactHookForm() {
     if (data.image instanceof File) {
       const convertedPhoto = await convertPhoto(data.image);
       const formData: Base64FormDataType = { ...data, image: convertedPhoto };
+      dispatch(setEffect(true));
       dispatch(setData([formData]));
       navigate('/');
     }

@@ -85,6 +85,8 @@ button:focus-visible {
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .tiles-wrapper {
@@ -93,11 +95,17 @@ button:focus-visible {
   gap: 2rem;
 }
 
+.data-tile__active {
+  outline: 5px solid rgb(0, 103, 176);
+  transition: 0.5s all;
+}
+
 .data-tile {
   border-radius: 5px;
   padding: 0.5rem;
   text-align: left;
   background-color: rgb(238, 247, 255);
+  transition: 0.5s all;
 }
 
 input[type='text'],

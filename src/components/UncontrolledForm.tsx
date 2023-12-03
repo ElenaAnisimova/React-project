@@ -8,6 +8,7 @@ import { setData } from '../utils/store/reducers/dataSlice';
 import { convertPhoto } from '../utils/helpers/convertPhoto';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { setEffect } from '../utils/store/reducers/newTileEffectlice';
 
 function UncontrolledForm() {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ function UncontrolledForm() {
           ...currFormData,
           image: convertedPhoto,
         };
+        dispatch(setEffect(true));
         dispatch(setData([formData]));
         navigate('/');
       }

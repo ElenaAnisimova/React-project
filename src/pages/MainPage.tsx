@@ -1,9 +1,19 @@
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../utils/store/store';
+import { useEffect } from 'react';
+import { setEffect } from '../utils/store/reducers/newTileEffectlice';
 
 function MainPage() {
   const currentData = useSelector((state: RootState) => state.data.data);
+  const dispatch = useDispatch();
+  const tileBorderEffect = useSelector(
+    (state: RootState) => state.effect.effect
+  );
+
+  useEffect(() => {
+    setTimeout(() => dispatch(setEffect(false)), 3000);
+  }, [dispatch]);
 
   return (
     <div>
@@ -14,7 +24,14 @@ function MainPage() {
       </div>
       <div className="tiles-wrapper">
         {currentData.map((item, i) => (
-          <section key={i} className="data-tile">
+          <section
+            key={i}
+            className={
+              tileBorderEffect && i === 0
+                ? 'data-tile data-tile__active'
+                : 'data-tile'
+            }
+          >
             <p>Name: {item.fullName}</p>
             <p>Age: {item.age}</p>
             <p>E-mail: {item.email}</p>
