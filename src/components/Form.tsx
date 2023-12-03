@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { countriesArray } from '../utils/countriesArr';
 
 function Form() {
+  const MAX_IMAGE_SIZE = 1048576; // 1Mb
   const schema = yup.object().shape({
     fullName: yup
       .string()
@@ -41,22 +42,39 @@ function Form() {
       .boolean()
       .oneOf([true])
       .required('Accept Terms & Conditions is required'),
-    image: yup.mixed().required('Photo is required'),
+    image: yup
+      .mixed()
+      .required('Photo is required')
+      .test('fileSize', 'Photo size is too big', (photo) => {
+        const image = photo as File;
+        return image && image.size <= MAX_IMAGE_SIZE;
+      }),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    trigger,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
+    mode: 'onChange',
   });
-  // const handleChange = () => {
-  //   lgo
-  // }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     console.log(data);
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0] instanceof File) {
+      // const file = event.target.files[0];
+      //  setImagePreview(URL.createObjectURL(file));
+      console.log(event.target.files[0].size);
+      setValue('image', event.target.files[0]);
+      trigger('image');
+    }
   };
   return (
     <form className="form" onSubmit={handleSubmit(onSubmit)} action="">
@@ -157,12 +175,18 @@ function Form() {
         type="file"
         accept="image/png, image/jpeg"
         id="image-input"
-        {...register('image')}
+        // {...register('image')}
+        onChange={handleImageChange}
       />
       <label className="error-label" htmlFor="image-input">
         {errors.image?.message}
       </label>
-      <button type="submit">Submit form</button>
+      <button
+        type="submit"
+        // disabled={!isValid}
+      >
+        Submit form
+      </button>
     </form>
   );
 }
